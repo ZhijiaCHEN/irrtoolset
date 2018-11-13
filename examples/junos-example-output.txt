@@ -1,0 +1,27 @@
+
+policy-options {
+   replace: community community-1 members [0:20];
+   policy-statement fictionalv4-pg {
+      term fictionalv4-pg-catch-rest {
+         then reject;
+      }
+   }
+}
+
+protocols {
+   bgp {
+      group peers-prng-fictionalinternetexchangev4 {
+         type external;
+         export [ fictionalv4-pg ];
+         neighbor 203.0.113.2 {
+            peer-as 1234;
+         }
+         neighbor 203.0.113.3 {
+            peer-as 4567;
+         }
+      }
+   }
+}
+
+
+policy-options {

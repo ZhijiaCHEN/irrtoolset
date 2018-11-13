@@ -1,0 +1,49 @@
+
+!
+route-policy fictionalv4-pg
+ drop
+end-policy
+!
+router bgp 1111
+!
+neighbor-group prng-fictionalinternetexchangev4
+  address-family ipv4 unicast
+   route-policy fictionalv4-pg out
+address-family ipv4 unicast
+ neighbor 203.0.113.2
+  remote-as 1234
+address-family ipv4 unicast
+ neighbor 203.0.113.3
+  remote-as 4567
+ neighbor 203.0.113.2
+  use neighbor-group prng-fictionalinternetexchangev4
+!
+ neighbor 203.0.113.3
+  use neighbor-group prng-fictionalinternetexchangev4
+!
+exit
+!
+
+!
+route-policy fictionalv6-pg
+ drop
+end-policy
+!
+router bgp 1111
+!
+neighbor-group prng-fictionalinternetexchangev6
+  address-family ipv6 unicast
+   route-policy fictionalv6-pg out
+address-family ipv6 unicast
+ neighbor 2001:db8:1234::1
+  remote-as 1234
+address-family ipv6 unicast
+ neighbor 2001:db8:1234::1
+  remote-as 4567
+ address-family ipv6 unicast
+  neighbor 2001:db8:1234::1
+  use neighbor-group prng-fictionalinternetexchangev6
+!
+  neighbor 2001:db8:1234::1
+  use neighbor-group prng-fictionalinternetexchangev6
+!

@@ -1,0 +1,56 @@
+
+!
+no ip prefix-list pl100
+ip prefix-list pl100 deny 0.0.0.0/0 le 32
+!
+no route-map fictionalv4-pg
+!
+route-map fictionalv4-pg permit 1
+ match ip address prefix-list pl100
+ set metric 0
+ set community  0:20
+exit
+!
+router bgp 1111
+!
+template peer-policy prng-fictionalinternetexchangev4
+ route-map fictionalv4-pg out
+ remove-private-as
+exit-peer-policy
+!
+!
+ address-family ipv4 unicast
+ neighbor 203.0.113.2 remote-as 1234
+ neighbor 203.0.113.2 inherit peer-policy prng-fictionalinternetexchangev4
+ neighbor 203.0.113.3 remote-as 4567
+ neighbor 203.0.113.3 inherit peer-policy prng-fictionalinternetexchangev4
+ address-family ipv6 unicast
+exit
+!
+
+!
+no ipv6 prefix-list ipv6-pl150
+ipv6 prefix-list ipv6-pl150 deny ::/0 le 128
+!
+no route-map fictionalv6-pg
+!
+route-map fictionalv6-pg permit 1
+ match ipv6 address prefix-list ipv6-pl150
+ set metric 0
+ set community  0:20
+exit
+!
+router bgp 1111
+!
+template peer-policy prng-fictionalinternetexchangev6
+ route-map fictionalv6-pg out
+ remove-private-as
+exit-peer-policy
+!
+!
+ address-family ipv6 unicast
+ address-family ipv6 unicast
+ neighbor 2001:db8:1234::1 remote-as 1234
+  neighbor 2001:db8:1234::1 activate
+  neighbor 2001:db8:1234::1 inherit peer-policy prng-fictionalinternetexchangev6
+ neighbor 2001:db8:1234::1 remote-as 4567
