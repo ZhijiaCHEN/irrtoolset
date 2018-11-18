@@ -1,0 +1,90 @@
+
+router bgp 1111
+ neighbor 203.0.113.2 remote-as 1234
+ neighbor 203.0.113.2 description === IPv4 Peering with AS1234 over Fictional Internet Exchange ===
+ neighbor 203.0.113.2 maximum-prefix 50 90
+ neighbor 203.0.113.2 password 0 a_password
+!
+no ip prefix-list pl100
+ip prefix-list pl100 permit 0.0.0.0/0 le 32
+!
+no route-map as1234-in
+!
+route-map as1234-in permit 1
+ match ip address prefix-list pl100
+ set local-preference 990
+exit
+!
+router bgp 1111
+!
+ neighbor 203.0.113.2 remote-as 1234
+ neighbor 203.0.113.2 route-map as1234-in in
+!
+exit
+!
+no route-map as1234-out
+!
+route-map as1234-out permit 1
+ match ip address prefix-list pl100
+exit
+!
+router bgp 1111
+!
+ neighbor 203.0.113.2 remote-as 1234
+ neighbor 203.0.113.2 route-map as1234-out out
+!
+exit
+
+router bgp 1111
+ neighbor 203.0.113.3 remote-as 4567
+ neighbor 203.0.113.3 description === Peering with AS4567 over Fictional Internet Exchange ===
+ neighbor 203.0.113.3 maximum-prefix 50 90
+!
+no route-map as4567-in
+!
+route-map as4567-in permit 1
+ match ip address prefix-list pl100
+ set local-preference 980
+exit
+!
+router bgp 1111
+!
+ neighbor 203.0.113.3 remote-as 4567
+ neighbor 203.0.113.3 route-map as4567-in in
+!
+exit
+!
+no ip prefix-list pl101
+ip prefix-list pl101 permit 1.1.2.0/24
+ip prefix-list pl101 permit 143.205.0.0/16
+ip prefix-list pl101 permit 193.110.32.0/21
+ip prefix-list pl101 permit 194.110.40.0/23
+ip prefix-list pl101 permit 202.47.64.0/20
+ip prefix-list pl101 permit 202.53.224.0/19
+ip prefix-list pl101 permit 202.67.8.0/21
+ip prefix-list pl101 permit 202.67.32.0/20
+ip prefix-list pl101 permit 202.78.224.0/21
+ip prefix-list pl101 permit 202.87.248.0/24
+ip prefix-list pl101 permit 202.92.192.0/24
+ip prefix-list pl101 permit 202.93.112.0/20
+ip prefix-list pl101 permit 202.122.9.0/24
+ip prefix-list pl101 permit 202.122.10.0/24
+ip prefix-list pl101 permit 202.123.224.0/20
+ip prefix-list pl101 permit 202.127.96.0/20
+ip prefix-list pl101 permit 202.149.66.0/24
+ip prefix-list pl101 permit 202.149.72.0/23 ge 24 le 24
+ip prefix-list pl101 permit 202.153.224.0/19
+ip prefix-list pl101 permit 202.162.208.0/22
+ip prefix-list pl101 deny 0.0.0.0/0 le 32
+!
+route-map as4567-in permit 2
+ match ip address prefix-list pl101
+exit
+!
+router bgp 1111
+!
+ neighbor 203.0.113.3 remote-as 4567
+ neighbor 203.0.113.3 route-map as4567-in out
+!
+exit
+

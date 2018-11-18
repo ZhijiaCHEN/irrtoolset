@@ -5,11 +5,8 @@ peering-set: prng-transits
 peering: AS4567 203.0.113.3 at 203.0.113.1
 
 aut-num: AS1111
-import: from prng-customers action perf=10;
-        accept <^prng-customers+$>
-import: from prng-transits action perf=20;
-        accept ANY
 export: to prng-customers announce ANY;
-export: to prng-transits announce AS1111 prng-customers;
-
+export: to prng-transits announce AS1111 AS1234;
+import: from prng-customers action pref = 10; accept ANY;
+import: from prng-transits action pref = 20; accept ANY;
 
