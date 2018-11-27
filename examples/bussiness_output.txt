@@ -1,7 +1,7 @@
 
 router bgp 1111
  neighbor 203.0.113.2 remote-as 1234
- neighbor 203.0.113.2 description === IPv4 Peering with AS1234 over Fictional Internet Exchange ===
+ neighbor 203.0.113.2 description === IPv4 Peering with AS1234 ===
  neighbor 203.0.113.2 maximum-prefix 50 90
  neighbor 203.0.113.2 password 0 a_password
 !
@@ -37,8 +37,9 @@ exit
 
 router bgp 1111
  neighbor 203.0.113.3 remote-as 4567
- neighbor 203.0.113.3 description === Peering with AS4567 over Fictional Internet Exchange ===
+ neighbor 203.0.113.3 description === IPv4 Peering with AS4567 ===
  neighbor 203.0.113.3 maximum-prefix 50 90
+ neighbor 203.0.113.3 password 0 a_password
 !
 no route-map as4567-in
 !
